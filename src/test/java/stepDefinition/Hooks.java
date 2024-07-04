@@ -40,7 +40,7 @@ public class Hooks extends BaseUtil {
 
     @Before
     public void setup(Scenario scenario) {
-        // Initialize ExtentReports and attach the reporter
+        
         htmlReporter = new ExtentHtmlReporter("C:\\ExtentReport\\Report.html");
         htmlReporter.config().setDocumentTitle("Automation Report");
         htmlReporter.config().setReportName("Test Report");
@@ -49,7 +49,7 @@ public class Hooks extends BaseUtil {
         extent = new ExtentReports();
         extent.attachReporter(htmlReporter);
 
-        // Start test logging for the scenario
+        
         test = extent.createTest(scenario.getName());
 
         WebDriverManager.firefoxdriver().setup();
@@ -62,13 +62,13 @@ public class Hooks extends BaseUtil {
     @AfterStep
     public void takeScreenshot(Scenario scenario) {
         if (scenario.isFailed()) {
-            // Take screenshot
+            
             TakesScreenshot ts = (TakesScreenshot) base.driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
-            // Define the destination path for the screenshot
+            
             File destination = new File("/AutomationExecise/test-output/" + scenario.getName() + ".png");
             try {
-                // Copy the screenshot to the destination path
+                
                 FileHandler.copy(source, destination);
                 test.fail("Scenario failed: " + scenario.getName(), 
                           MediaEntityBuilder.createScreenCaptureFromPath(destination.getAbsolutePath()).build());
@@ -88,7 +88,7 @@ public class Hooks extends BaseUtil {
         }
         log.info("Browser closed");
 
-        // Save and flush the report
+        
         extent.flush();
     }
 }
