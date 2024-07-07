@@ -15,11 +15,15 @@ Feature: List all Samsung phones with specific specifications
     
 
   @tag2
-  Scenario Outline: Sim free Samsung
-    Given user is on simfree landing page "URL2"
-    When user filter the brand to Samsung
-    And user filter the camera resolution to 20 MP and above
-    And user filter the model year to 2023
-    And user filter the price range to between £50 and £100
-    Then user should see a list of Samsung phones that match the criteria
-    
+  
+  Scenario Outline: Filter phones by brand, camera resolution, model year, and price range
+    Given user is on simfree landing page "<url>"
+    When user filter the brand to "<brand>"
+    And user filter the camera resolution to "<camera_resolution>"
+    And user filter the model year to "<model_year>"
+    And user filter the price range to between <min_price> and <max_price>
+    Then user should see a list of "<brand>" phones that match the criteria
+
+  Examples:
+    | url   | brand   | camera_resolution | model_year | min_price | max_price |
+    | URL2  | Samsung | £20 MP and above  | 2023       | 50        | 100       |

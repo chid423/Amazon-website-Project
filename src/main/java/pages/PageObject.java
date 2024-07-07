@@ -17,8 +17,6 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import library.Constants;
-
 public class PageObject {
     public WebDriver driver;
 
@@ -30,8 +28,9 @@ public class PageObject {
     @FindBy(id = "nav-hamburger-menu")
     @CacheLookup
     WebElement menu;
-
-    @FindBy(xpath = "/html[1]/body[1]/div[3]/div[2]/div[1]/ul[1]/li[20]/a[1]/div[1]")
+    
+    
+    @FindBy (xpath = "//ul[@class='hmenu hmenu-visible']//li[20]//a[1]")
     @CacheLookup
     WebElement electronicsAndComputer;
 
@@ -54,9 +53,12 @@ public class PageObject {
 
     @FindBy(xpath = "//span[contains(text(),'20 MP & above')]")
     WebElement resolution;
+    
+    @FindBy (xpath = "//input[@id='p_36/range-slider_slider-item_upper-bound-slider']")
+    WebElement upperSlider;
 
-    @FindBy(xpath = "//input[@id='p_36/range-slider_slider-item_upper-bound-slider']")
-    WebElement slider;
+    @FindBy(xpath = "//input[@id='p_36/range-slider_slider-item_lower-bound-slider']']")
+    WebElement lowerSlider;
 
     @FindBy(xpath = "//span[normalize-space()='Results']")
     WebElement result;
@@ -76,11 +78,12 @@ public class PageObject {
 
     public void clickElectronicsComputer() {
         handleAlert();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().forward();
         driver.navigate().back();
         
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement electronicsAndComputer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("/html[1]/body[1]/div[3]/div[2]/div[1]/ul[1]/li[20]/a[1]/div[1]")));
+        WebElement electronicsAndComputer = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@class='hmenu hmenu-visible']//li[20]//a[1]")));
 
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", electronicsAndComputer);
         wait.until(ExpectedConditions.elementToBeClickable(electronicsAndComputer)).click();
@@ -90,18 +93,18 @@ public class PageObject {
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
     }
 
+
     public void clickPhoneAndAccessories() {
         handleAlert();
+        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         driver.navigate().back();
         driver.navigate().forward();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneAndAccessories);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", phoneAndAccessories);
     }
 
     public void clickSamsungButton() {
         handleAlert();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", samsungButton);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", samsungButton);
         samsungButton.click();
@@ -109,7 +112,6 @@ public class PageObject {
 
     public void clickSimFreeSamsung() {
         handleAlert();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", simFreeSamsung);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", simFreeSamsung);
         simFreeSamsung.click();
@@ -117,7 +119,6 @@ public class PageObject {
 
     public void clickSamsung() {
         handleAlert();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", samsung);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", samsung);
         samsung.click();
@@ -137,20 +138,20 @@ public class PageObject {
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", resolution);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", resolution);
         resolution.click();
+        
     }
 
-    public void adjustSlider() {
+    public void adjustSlider(int minPrice, int maxPrice) {
         handleAlert();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", slider);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", slider);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", upperSlider);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", upperSlider);
         Actions act = new Actions(driver);
-        act.moveToElement(slider).dragAndDropBy(slider, Constants.UPPER, Constants.LOWER).build().perform();
+        act.moveToElement(upperSlider).dragAndDropBy(upperSlider, maxPrice, minPrice).build().perform();
     }
 
     public List<String> getAvailablePhones() {
         handleAlert();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", result);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", result);
         

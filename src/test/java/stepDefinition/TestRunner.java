@@ -6,7 +6,7 @@ import io.cucumber.junit.CucumberOptions;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-    features = {"C:\\Users\\chidy\\eclipse-workspace\\AutomationExecise\\src\\test\\resources\\feature"},
+    features = {"src\\test\\resources\\feature\\home_page.feature"}, 
     glue = {"stepDefinition"},
     dryRun = false,
     plugin = {
@@ -19,4 +19,5 @@ import io.cucumber.junit.CucumberOptions;
 )
 public class TestRunner {
 }
+
 
