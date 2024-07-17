@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.NoAlertPresentException;
@@ -48,8 +49,8 @@ public class PageObject {
     @FindBy(xpath = "//li[@id='p_123/46655']//i[@class='a-icon a-icon-checkbox']")
     WebElement samsung;
 
-    @FindBy(xpath = "//span[contains(text(),'2023')]")
-    WebElement year2023;
+    @FindBy(xpath = "//*[@id=\"filters\"]/ul[1]/span/span[2]")
+    WebElement year;
 
     @FindBy(xpath = "//span[contains(text(),'20 MP & above')]")
     WebElement resolution;
@@ -60,10 +61,12 @@ public class PageObject {
     @FindBy(xpath = "//input[@id='p_36/range-slider_slider-item_lower-bound-slider']']")
     WebElement lowerSlider;
 
-    @FindBy(xpath = "//span[normalize-space()='Results']")
+    @FindBy(xpath = "//*[@id=\"search\"]/div[1]/div[1]/div/span[1]/div[1]")
     WebElement result;
 
     private List<WebElement> phoneElements;
+    
+ 
 
     public void clickMenu() {
         handleAlert();
@@ -96,7 +99,7 @@ public class PageObject {
 
     public void clickPhoneAndAccessories() {
         handleAlert();
-        driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         driver.navigate().back();
         driver.navigate().forward();
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", phoneAndAccessories);
@@ -127,9 +130,9 @@ public class PageObject {
     public void clickYear2023() {
         handleAlert();
         driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", year2023);
-        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", year2023);
-        year2023.click();
+        ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", year);
+        ((JavascriptExecutor) driver).executeScript("arguments[0].click();", year);
+        year.click();
     }
 
     public void click20MpAndAbove() {
@@ -149,19 +152,39 @@ public class PageObject {
         Actions act = new Actions(driver);
         act.moveToElement(upperSlider).dragAndDropBy(upperSlider, maxPrice, minPrice).build().perform();
     }
+   
+    
+    
+    
+    public List<WebElement> getWebElement() {
+    	
+    	List <WebElement>values= driver.findElements(By.xpath("//*[@id=\"filters\"]/ul[1]/span/span[2]"));
+    	//boolean status= false;
+    	for(WebElement ele : values) {
+    	String value = ele.getText();
+    	System.out.println(value);
+    		
+    	}
+    	return values;
+    	}
 
-    public List<String> getAvailablePhones() {
+    	
+    
+    
+    public List<WebElement> getAvailablePhones() {
         handleAlert();
         ((JavascriptExecutor) driver).executeScript("arguments[0].scrollIntoView(true);", result);
         ((JavascriptExecutor) driver).executeScript("arguments[0].click();", result);
-        
-        List<String> phones = new ArrayList<>();
-        for (WebElement phoneElement : phoneElements) {
-            phones.add(phoneElement.getText());
+      
+        List <WebElement>values1= driver.findElements(By.xpath("//*[@id=\"search\"]/div[1]/div[1]/div/span[1]/div[1]"));
+    	//boolean status= false;
+    	for(WebElement ele : values1) {
+    	String value = ele.getText();
+    	System.out.println(value);
         }
-        return phones;
+        return values1;
     }
-
+    
     public String getTitle() {
         handleAlert();
         return driver.getTitle();

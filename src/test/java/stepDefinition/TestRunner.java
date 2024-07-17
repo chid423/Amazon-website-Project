@@ -15,7 +15,8 @@ import io.cucumber.junit.CucumberOptions;
         "json:target/cucumber.json",
         "com.aventstack.extentreports.cucumber.adapter.ExtentCucumberAdapter:"
     },
-    monochrome = true
+    monochrome = true,
+    tags = "@tag1"
 )
 public class TestRunner {
 }

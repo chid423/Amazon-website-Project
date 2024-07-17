@@ -4,7 +4,10 @@ import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
@@ -14,9 +17,9 @@ import pages.PageObject;
 
 public class Samsung_Page {
 
-    private static Logger log = LogManager.getLogger(Samsung_Page.class);
-    public WebDriver driver;
-    public PageObject po;
+    private static final Logger log = LogManager.getLogger(Samsung_Page.class);
+    private WebDriver driver;
+    private PageObject po;
 
     @Given("user is on simfree landing page {string}")
     public void user_is_on_simfree_landing_page(String url) {
@@ -28,48 +31,61 @@ public class Samsung_Page {
 
     @When("user filter the brand to {string}")
     public void user_filter_the_brand_to(String brand) {
-        if (brand.equals("Samsung")) {
+        if ("Samsung".equals(brand)) {
             po.clickSamsung();
             log.info(brand + " brand is selected");
+        } else {
+            log.warn("Brand " + brand + " is not recognized.");
         }
-        
     }
 
     @When("user filter the camera resolution to {string}")
     public void user_filter_the_camera_resolution_to(String cameraResolution) {
-        if (cameraResolution.equals("£20 MP and above")) {
+        if ("20 MP and above".equals(cameraResolution)) {
             po.click20MpAndAbove();
             log.info(cameraResolution + " is selected");
+        } else {
+            log.warn("Camera resolution " + cameraResolution + " is not recognized.");
         }
-        
     }
 
     @When("user filter the model year to {string}")
     public void user_filter_the_model_year_to(String stringModelYear) {
-        Integer modelYear = Integer.parseInt(stringModelYear);
-        if (modelYear == 2023) 
-            po.clickYear2023();
+        try {
+            int modelYear = Integer.parseInt(stringModelYear);
+            po.getWebElement();
             log.info("Year " + modelYear + " is selected");
-     
+        } catch (NumberFormatException e) {
+            log.error("Invalid model year: " + stringModelYear, e);
+        }
     }
-
+    
     @When("user filter the price range to between {int} and {int}")
     public void user_filter_the_price_range_to_between(Integer minPrice, Integer maxPrice) {
         po.adjustSlider(minPrice, maxPrice);
         log.info("Price range between £" + minPrice + " and £" + maxPrice + " is selected");
     }
-
+    
+    
+    
     @Then("user should see a list of {string} phones that match the criteria")
-    public void user_should_see_a_list_of_phones_that_match_the_criteria(String brand) {
-        boolean isNoMatchingRecord = Constants.MIN_PRICE <= Constants.LOWER && Constants.MAX_PRICE <= Constants.UPPER;
-        if (isNoMatchingRecord) {
-            System.out.println("There is no matching record");
-            log.info("No matching record found");
+    public List<WebElement> user_should_see_a_list_of_phones_that_match_the_criteria(String brand) {
+        List<WebElement> valuess = po.getAvailablePhones();
+        
+        if (valuess.isEmpty()) {
+            System.out.println("No matching records found");
+            log.info("No matching records found");
         } else {
-            List<String> availablePhones = po.getAvailablePhones();
-            System.out.println("List of available " + brand + " phones that match the criteria:");
-            availablePhones.forEach(System.out::println);
-            log.info("List of available phones displayed");
+            for (WebElement ell : valuess) {
+                String values3 = ell.getText();
+                System.out.println(values3);
+                log.info("Matching record found: " + values3);
+            }
         }
+        
+        return valuess;
     }
-}
+    	
+    	
+}		
+    	
